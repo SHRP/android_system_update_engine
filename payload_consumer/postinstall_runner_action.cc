@@ -173,6 +173,9 @@ void PostinstallRunnerAction::PerformPartitionPostinstall() {
 
   LOG(INFO) << current_device << " has been mounted R/W " << mount_count << " times.";
 
+  //Reset counter to 0 in order to skip backuptools
+  mount_count = 0;
+
   if (mount_count > 0) {
     // Mount the target partition R/W
     LOG(INFO) << "Running backuptool scripts";
