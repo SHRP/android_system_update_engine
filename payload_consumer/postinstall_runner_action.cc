@@ -363,13 +363,9 @@ void PostinstallRunnerAction::CompletePartitionPostinstall(
       error_code = ErrorCode::kPostinstallFirmwareRONotUpdatable;
     }
 
-    // If postinstall script for this partition is optional we can ignore the
-    // result.
-    if (install_plan_.partitions[current_partition_].postinstall_optional) {
-      LOG(INFO) << "Ignoring postinstall failure since it is optional";
-    } else {
-      return CompletePostinstall(error_code);
-    }
+    // Make postinstall totaly optional, prevents error while installing
+    // LineageOS-based roms.
+    LOG(INFO) << "Ignoring postinstall failure since it is optional";
   }
   accumulated_weight_ += partition_weight_[current_partition_];
   current_partition_++;
