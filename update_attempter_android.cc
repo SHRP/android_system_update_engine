@@ -214,16 +214,15 @@ bool UpdateAttempterAndroid::ApplyPayload(
   if (property_get_bool("tw_active_slot_install", 0)) {
     LOG(WARNING) << "[i] Installing into active slot!";
     install_plan_.target_slot = install_plan_.source_slot;
+    install_plan_.switch_slot_on_reboot = false;
   } else {
     LOG(WARNING) << "[i] Installing into other slot!";
     install_plan_.target_slot = install_plan_.source_slot == 0 ? 1 : 0;
+    install_plan_.switch_slot_on_reboot = true;
   }
 
   install_plan_.powerwash_required =
       GetHeaderAsBool(headers[kPayloadPropertyPowerwash], false);
-
-  install_plan_.switch_slot_on_reboot =
-      GetHeaderAsBool(headers[kPayloadPropertySwitchSlotOnReboot], true);
 
   install_plan_.run_post_install = true;
   // Optionally skip post install if and only if:
