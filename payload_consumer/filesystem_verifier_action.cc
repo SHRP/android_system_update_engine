@@ -206,7 +206,7 @@ void FilesystemVerifierAction::FinishPartitionHashing() {
                    << "' partition verification failed.";
         if (partition.source_hash.empty()) {
           // No need to verify source if it is a full payload.
-          return Cleanup(ErrorCode::kNewRootfsVerificationError);
+          // return Cleanup(ErrorCode::kNewRootfsVerificationError);
         }
         // If we have not verified source partition yet, now that the target
         // partition does not match, and it's not a full payload, we need to
@@ -242,7 +242,7 @@ void FilesystemVerifierAction::FinishPartitionHashing() {
                      "-binary | openssl base64";
         LOG(INFO) << "To get the checksum of partitions in a bin file, "
                   << "run: .../src/scripts/sha256_partitions.sh .../file.bin";
-        return Cleanup(ErrorCode::kDownloadStateInitializationError);
+        // return Cleanup(ErrorCode::kDownloadStateInitializationError);
       }
       // The action will skip kVerifySourceHash step if target partition hash
       // matches, if we are in this step, it means target hash does not match,

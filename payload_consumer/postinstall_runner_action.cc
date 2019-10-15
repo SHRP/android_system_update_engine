@@ -378,28 +378,17 @@ void PostinstallRunnerAction::CompletePostinstall(ErrorCode error_code) {
   // We only attempt to mark the new slot as active if all the postinstall
   // steps succeeded.
   if (error_code == ErrorCode::kSuccess) {
-    if (install_plan_.switch_slot_on_reboot) {
-      if (!boot_control_->SetActiveBootSlot(install_plan_.target_slot)) {
-        error_code = ErrorCode::kPostinstallRunnerError;
-      }
-    } else {
-      error_code = ErrorCode::kUpdatedButNotActive;
-    }
+    boot_control_->SetActiveBootSlot(install_plan_.target_slot);
   }
 
   ScopedActionCompleter completer(processor_, this);
   completer.set_code(error_code);
-
-  if (error_code != ErrorCode::kSuccess &&
-      error_code != ErrorCode::kUpdatedButNotActive) {
-    LOG(ERROR) << "Postinstall action failed.";
 
     // Undo any changes done to trigger Powerwash.
     if (powerwash_scheduled_)
       hardware_->CancelPowerwash();
 
     return;
-  }
 
   LOG(INFO) << "All post-install commands succeeded";
   if (HasOutputPipe()) {

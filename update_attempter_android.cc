@@ -215,6 +215,7 @@ bool UpdateAttempterAndroid::ApplyPayload(
     LOG(WARNING) << "[i] Installing into active slot!";
     install_plan_.target_slot = install_plan_.source_slot;
     install_plan_.switch_slot_on_reboot = false;
+    install_plan_.run_post_install = false;
   } else {
     LOG(WARNING) << "[i] Installing into other slot!";
     install_plan_.target_slot = install_plan_.source_slot == 0 ? 1 : 0;
@@ -224,7 +225,7 @@ bool UpdateAttempterAndroid::ApplyPayload(
   install_plan_.powerwash_required =
       GetHeaderAsBool(headers[kPayloadPropertyPowerwash], false);
 
-  install_plan_.run_post_install = true;
+  install_plan_.run_post_install = false;
   // Optionally skip post install if and only if:
   // a) we're resuming
   // b) post install has already succeeded before
@@ -237,6 +238,7 @@ bool UpdateAttempterAndroid::ApplyPayload(
           GetHeaderAsBool(headers[kPayloadPropertyRunPostInstall], true);
     }
   }
+  install_plan_.run_post_install = false;
 
   NetworkId network_id = kDefaultNetworkId;
   if (!headers[kPayloadPropertyNetworkId].empty()) {
@@ -464,10 +466,10 @@ void UpdateAttempterAndroid::ProcessingDone(const ActionProcessor* processor,
       break;
 
     case ErrorCode::kFilesystemCopierError:
-    case ErrorCode::kNewRootfsVerificationError:
+    //case ErrorCode::kNewRootfsVerificationError:
     case ErrorCode::kNewKernelVerificationError:
     case ErrorCode::kFilesystemVerifierError:
-    case ErrorCode::kDownloadStateInitializationError:
+    //case ErrorCode::kDownloadStateInitializationError:
       // Reset the ongoing update for these errors so it starts from the
       // beginning next time.
       DeltaPerformer::ResetUpdateProgress(prefs_, false);
