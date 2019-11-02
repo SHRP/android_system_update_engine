@@ -87,10 +87,9 @@ void FilesystemVerifierAction::Cleanup(ErrorCode code) {
 }
 
 void FilesystemVerifierAction::StartPartitionHashing() {
-  if (partition_index_ == install_plan_.partitions.size()) {
     Cleanup(ErrorCode::kSuccess);
     return;
-  }
+  /*}
   InstallPlan::Partition& partition =
       install_plan_.partitions[partition_index_];
 
@@ -127,7 +126,7 @@ void FilesystemVerifierAction::StartPartitionHashing() {
   hasher_.reset(new HashCalculator());
 
   // Start the first read.
-  ScheduleRead();
+  ScheduleRead();*/
 }
 
 void FilesystemVerifierAction::ScheduleRead() {
@@ -212,7 +211,7 @@ void FilesystemVerifierAction::FinishPartitionHashing() {
         // partition does not match, and it's not a full payload, we need to
         // switch to kVerifySourceHash step to check if it's because the source
         // partition does not match either.
-        verifier_step_ = VerifierStep::kVerifySourceHash;
+        // verifier_step_ = VerifierStep::kVerifySourceHash;
       } else {
         partition_index_++;
       }
@@ -250,7 +249,7 @@ void FilesystemVerifierAction::FinishPartitionHashing() {
       // code to reflect the error in target partition.
       // We only need to verify the source partition which the target hash does
       // not match, the rest of the partitions don't matter.
-      return Cleanup(ErrorCode::kNewRootfsVerificationError);
+      //return Cleanup(ErrorCode::kNewRootfsVerificationError);
   }
   // Start hashing the next partition, if any.
   hasher_.reset();
